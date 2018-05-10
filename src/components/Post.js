@@ -30,14 +30,14 @@ function Post(props) {
       <Card className={classes.card}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary">
-            Post by user
+           User Id: {props.userId}
           </Typography>
           <Typography variant="headline" component="h3">
-            Post Title
+            {props.title}
           </Typography>
           
           <Typography component="p">
-            Post content Lorem ipsum dolor sit amet, consectetur adipisicing elit. In exercitationem quam dolores.
+            {props.body}
           </Typography>
         </CardContent>
       
