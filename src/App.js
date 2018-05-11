@@ -37,7 +37,13 @@ class App extends Component {
       // show an alert with the post data
       this.setState({newPost: response.data})
       this.showAlert();
-      // to do: append the newPost to the posts
+      /*Since the API doesn't actually add the post
+      spoof it my prepending the new post to the post object
+      works until the app.js gets mounted again, which resets the post object
+      React will show error about keys because every new post has the same post id */
+      let posts = this.state.posts.slice();
+      posts.unshift(response.data);
+      this.setState({posts: posts});
     })
     .catch(err => {
       //handle failure
