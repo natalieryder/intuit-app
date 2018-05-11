@@ -7,7 +7,7 @@ import Toolbar from 'material-ui/Toolbar';
 import { createMuiTheme } from 'material-ui/styles';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Orange from 'material-ui/colors/orange';
-import './Nav.css'
+
 
 const theme = createMuiTheme({
   palette: {
