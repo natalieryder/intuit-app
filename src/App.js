@@ -8,11 +8,13 @@ import Form from "./components/Form";
 import PostList from "./components/PostList";
 import NotFound from "./components/NotFound";
 import Nav from "./components/Nav/Nav";
+import Alert from "./components/Alert";
 import API from './utils/API';
 
 class App extends Component {
   state = {
-    posts: []
+    posts: [],
+    alertIsOpen: false
   }
   componentDidMount() {
     this.getPosts();
@@ -24,18 +26,37 @@ class App extends Component {
       this.setState({posts: response.data})
     })
     .catch(err => {
-      console.log(err);
+      //handle failure
+      this.setState({fetchError: err.message}, () => console.log(this.state.error));
     })
   }
-  
+
   createPost = (post) => {
     API.createPost(post)
     .then(response => {
-      console.log(response)
+      // show an alert with the post data
+      this.setState({newPost: response.data})
+      this.showAlert();
+      // to do: append the newPost to the posts
     })
     .catch(err => {
-      console.log(err)
+      //handle failure
+      this.setState({errorMessage: err.message});
+      this.showAlert();
     })
+  }
+
+  showAlert = () => {
+    this.setState({ alertIsOpen: true});
+  }
+
+  handleClose = () => {
+    this.setState({ alertIsOpen: false });
+  }
+
+  showError = (message) => {
+    this.setState({errorMessage: message});
+    this.showAlert();
   }
 
   render() {
@@ -45,12 +66,15 @@ class App extends Component {
           <div>
             <Nav/>
             <Switch>
-              <Route exact path="/" render={(props) => <PostList posts={this.state.posts}/>}/>
-              <Route exact path="/post" render={(props) => <Form createPost={this.createPost}/>}/>
+              <Route exact path="/" render={(props) => <PostList posts={this.state.posts} err={this.state.fetchError}/>}/>
+              <Route exact path="/post" render={(props) => <Form createPost={this.createPost} showError={this.showError}/>}/>
               <Route component={NotFound} />         
             </Switch>
+            <Alert open={this.state.alertIsOpen} handleClose={this.handleClose} message={this.state.modalMessage} post={this.state.newPost} errorMessage={this.state.errorMessage}/>
+
           </div>
         </Router>
+        
       </div>
     );
   }

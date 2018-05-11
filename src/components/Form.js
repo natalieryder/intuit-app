@@ -63,6 +63,9 @@ class Form extends Component {
 				title,
 				body
 			})
+			this.setState({userId: '', title: '', body: ''})
+		} else {
+			this.props.showError("Please fill all fields")
 		}
 	}
 	checkErrors = (errorObj) =>  {
