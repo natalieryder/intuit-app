@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import { 
   BrowserRouter as Router,
   Route,
@@ -7,7 +6,7 @@ import {
 import Form from "./components/Form";
 import PostList from "./components/PostList";
 import NotFound from "./components/NotFound";
-import Nav from "./components/Nav/Nav";
+import Nav from "./components/Nav";
 import Alert from "./components/Alert";
 import API from './utils/API';
 import './App.css';
@@ -22,7 +21,7 @@ class App extends Component {
     morePosts: true
   }
   componentDidMount() {
-    this.getPosts(this.state.offset);
+    this.getPosts();
     window.addEventListener("scroll", this.handleScroll);
   }
 
@@ -34,23 +33,24 @@ class App extends Component {
     })
     .catch(err => {
       //handle failure
-      this.setState({fetchError: err.message}, () => console.log(this.state.error));
+      this.setState({fetchError: err.message, gettingPosts: false})
     })
   }
-
+  
+  // limit the number of posts shown on initial load to 10
   setVisiblePosts = () => {
     this.setState({gettingPosts: true});
-    let posts = this.state.visiblePosts.slice();
+    let visiblePosts = this.state.visiblePosts.slice();
     let offset = this.state.offset;
     let newPosts = this.state.posts.slice(offset, offset + 10);
 
-    //if there are any more posts, add them to the view
+    //if there are any more posts, add them to visiblePosts and increase offset by 10
     //otherwise, set morePosts to false
     if (newPosts.length) {
-      posts = posts.concat(newPosts);
+      visiblePosts = visiblePosts.concat(newPosts);
       //set timeout to pretend we are waiting for an API call
       setTimeout( () =>
-        this.setState({visiblePosts: posts, offset: offset + 10, gettingPosts: false}),
+        this.setState({visiblePosts, offset: offset + 10, gettingPosts: false}),
       500)
     
     } else {
@@ -68,9 +68,9 @@ class App extends Component {
       spoof it my prepending the new post to the post object
       works until the app.js gets mounted again, which resets the post object
       React will show error about keys because every new post has the same post id */
-      let posts = this.state.visiblePosts.slice();
-      posts.unshift(response.data);
-      this.setState({visiblePosts: posts});
+      let visiblePosts = this.state.visiblePosts.slice();
+      visiblePosts.unshift(response.data);
+      this.setState({visiblePosts});
     })
     .catch(err => {
       //handle failure
@@ -114,11 +114,11 @@ class App extends Component {
           <div>
             <Nav/>
             <Switch>
-              <Route exact path="/" render={(props) => <PostList posts={this.state.visiblePosts} err={this.state.fetchError} gettingPosts={this.state.gettingPosts && this.state.morePosts}/>}/>
-              <Route exact path="/post" render={(props) => <Form createPost={this.createPost} showError={this.showError}/>}/>
+              <Route exact path={process.env.PUBLIC_URL + "/"} render={(props) => <PostList posts={this.state.visiblePosts} err={this.state.fetchError} gettingPosts={this.state.gettingPosts && this.state.morePosts}/>}/>
+              <Route exact path={process.env.PUBLIC_URL + "/post"} render={(props) => <Form createPost={this.createPost} showError={this.showError}/>}/>
               <Route component={NotFound} />         
             </Switch>
-            <Alert open={this.state.alertIsOpen} handleClose={this.handleClose} message={this.state.modalMessage} post={this.state.newPost} errorMessage={this.state.errorMessage}/>
+            <Alert open={this.state.alertIsOpen} handleClose={this.handleClose} post={this.state.newPost} errorMessage={this.state.errorMessage}/>
           </div>
         </Router>
         
