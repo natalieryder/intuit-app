@@ -1,8 +1,9 @@
-# Front-End Coding Assessment #3
+# Front-End Coding Assessment (#3)
 
 ## To run the app
 
-[web version](https://natalieryder.github.io/intuit-app/)
+### Easiest way
+Look at the [web version](https://natalieryder.github.io/intuit-app/)
 
 ### To run locally:
 
@@ -51,4 +52,4 @@ It's a good simple excercize with various options to customize to show different
 I think it is a great way to gauge both a candidate's skill and their interest in the position.
 
 ### What would you change in the exercise and/or process?
-The document with the directions could be more polished and clearer. I would put all the instructions in one place, rather than some steps in the email and some in an attachment. (Unless the challenge is also intended to test attention and organization, then, it is pretty good!)
+The document with the directions could be more polished and clearer. I would put all the instructions in one place, rather than some steps in the email and some in an attachment. (Unless the challenge is also intended to test attention and organization!)
