@@ -3,34 +3,45 @@ import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
 import { Link } from 'react-router-dom';
 import Post from './Post';
+/* themeing */
+import { createMuiTheme } from 'material-ui/styles';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Orange from 'material-ui/colors/orange';
 
-class AlertDialog extends React.Component {
-  render() {
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: Orange[900],
+    },
+  },
+})
+
+
+const AlertDialog = props => {
+
     return (
+      <MuiThemeProvider theme={theme}>
       <div>
         <Dialog
-          open={this.props.open}
-          onClose={this.props.handleClose}
+          open={props.open}
+          onClose={props.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-        {this.props.post
+        {props.post
           ?  (
               <div>
                 <DialogTitle id="alert-dialog-title">Success! You Posted:</DialogTitle>
                 <DialogContent>
-                  <Post {...this.props.post } />
+                  <Post {...props.post } />
                 </DialogContent>
-
-                
                 <DialogActions>
-                  <Link to="/">
-                    <Button onClick={this.props.handleClose} color="primary" autoFocus>
+                  <Link to={process.env.PUBLIC_URL + "/"}>
+                    <Button variant='raised' onClick={props.handleClose} color="primary" autoFocus>
                       Okay
                     </Button>
                   </Link>
@@ -39,9 +50,9 @@ class AlertDialog extends React.Component {
           )
           : (
             <div>
-              <DialogContent>{this.props.errorMessage}</DialogContent>
+              <DialogContent>{props.errorMessage}</DialogContent>
                 <DialogActions>
-                      <Button onClick={this.props.handleClose} color="primary" autoFocus>
+                      <Button variant='raised' onClick={props.handleClose} color="primary" autoFocus>
                         Okay
                       </Button>
                 </DialogActions>
@@ -50,8 +61,8 @@ class AlertDialog extends React.Component {
         }
         </Dialog>
       </div>
+      </MuiThemeProvider>
     );
-  }
 }
 
 export default AlertDialog;
