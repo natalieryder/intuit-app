@@ -1,10 +1,28 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import Button from 'material-ui/Button'
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import { FormControl } from 'material-ui/Form';
+/* themeing */
+import { createMuiTheme } from 'material-ui/styles';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Orange from 'material-ui/colors/orange';
+import lightBlue from 'material-ui/colors/lightBlue';
+
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+    	main: lightBlue[500],
+    	dark: lightBlue[700],
+
+    },
+    secondary: {
+    	main: Orange[900],
+    },
+  },
+})
+
 
 const styles = {
   formWrapper: {
@@ -13,8 +31,9 @@ const styles = {
     marginRight: '24px',
     marginLeft: '24px'
   },
-  margin: {
-    margin: '20px',
+  marginY: {
+    marginTop: '20px',
+    marginBottom: '20px'
   },
   error: {
   	marginRight: '20px',
@@ -36,7 +55,7 @@ class Form extends Component {
 	}
 	handleInput = prop => event => {
 		let errors = {...this.state.errors}
-		var charactersLeft;
+		var charactersLeft = this.state.characters;
 		// if they type and then delete, show the error state
 		if (!event.target.value.length) {
 			errors[prop] = true;
@@ -68,6 +87,7 @@ class Form extends Component {
 			this.props.showError("Please fill all fields")
 		}
 	}
+
 	checkErrors = (errorObj) =>  {
 		let areThereErrors = Object.keys(errorObj).reduce((errorBool, key) => {
 			// if there are any errors, return true, otherwise it will remain false
@@ -83,38 +103,40 @@ class Form extends Component {
 		let classes = this.props.classes;
 
 		return (
-			<div className={classes.formWrapper}>
-				<FormControl fullWidth>
-					<TextField className={classes.margin}
-					label="UserId"
-					error={this.state.errors.userId}
-					value={this.state.userId}
-					onChange={this.handleInput("userId")}/>
-					<TextField className={classes.margin}
-					label="Title"
-					error={this.state.errors.title}
-					value={this.state.title}
-					onChange={this.handleInput("title")}/>
-					{/* To Do:
-					Validate the length of the input */}
-					<TextField className={classes.margin}
-					label="Body"
-					error={this.state.errors.body}
-					value={this.state.body}
-					onChange={this.handleInput("body")}
-					multiline={true}
-					rows={3}
-				
-					/>
-					<div className={`${classes.error} ${(this.state.characters < 0) ? classes.errorOn : ''}`}>
-						{(this.state.characters > 130) 
-		            		? 'Type ' + (this.state.characters - 130) + ' more characters'
-		            		: this.state.characters + ' remaining'}
-		            </div>
-		            
-				</FormControl>
-				<Button disabled={this.state.areThereErrors} variant='raised' onClick={this.handlePost}> Post </Button>
-			</div>
+			<MuiThemeProvider theme={theme}>
+				<div className={classes.formWrapper}>
+					<FormControl fullWidth>
+						<TextField 
+							className={classes.marginY}
+							label="UserId"
+							error={this.state.errors.userId}
+							value={this.state.userId}
+							onChange={this.handleInput("userId")}/>
+						<TextField
+						className={classes.marginY}
+							label="Title"
+							error={this.state.errors.title}
+							value={this.state.title}
+							onChange={this.handleInput("title")}/>
+						<TextField 
+							className={classes.marginY}
+							label="Body"
+							error={this.state.errors.body}
+							value={this.state.body}
+							onChange={this.handleInput("body")}
+							multiline={true}
+							rows={3}/>
+
+						<div className={`${classes.error} ${(this.state.characters < 0) ? classes.errorOn : ''}`}>
+							{(this.state.characters > 130) 
+			            		? 'Type ' + (this.state.characters - 130) + ' more characters'
+			            		: this.state.characters + ' remaining'}
+			            </div>
+			            
+					</FormControl>
+					<Button color='secondary' disabled={this.state.areThereErrors} variant='raised' onClick={this.handlePost}> Post </Button>
+				</div>
+			</MuiThemeProvider>
 		)
 	}
 };
