@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
-import Button from 'material-ui/Button';
+import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-
 
 // create modular override styles for this component
 const styles = {
@@ -21,8 +19,6 @@ const styles = {
     fontSize: 14,
     fontWeight: 500
   },
-
-
 };
 
 function Post(props) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const NotFound = props => (
 
-	<div>Oops! This page doesn't exist.</div>
+	<div className="std-margin">Oops! This page doesn't exist.</div>
 
 );
 
